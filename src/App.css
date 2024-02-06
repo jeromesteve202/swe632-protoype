@@ -9,6 +9,14 @@ h1 {
   text-align: center;
 }
 
+h2 {
+  text-align: center;
+}
+
+h3 {
+  text-align: center;
+}
+
 .assignment-wrapper {
   background-color: #8f94bea4;
   padding: 2%;
@@ -84,6 +92,7 @@ h1 {
 }
 
 .button-area {
+  text-align: center;
   margin-bottom: 30px;
 }
 

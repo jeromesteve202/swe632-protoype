@@ -7,13 +7,13 @@ function App() {
 
   const [isCompleteScreen, setCompleteScreen] = useState(false);
   const [allAssignments, setAssignments] = useState([]);
-  const [newTitle, setNewTitle] = useState("");
-  const [newDescription, setNewDescription] = useState("");
+  const [newClass, setNewClass] = useState("");
+  const [newAssignment, setNewAssignment] = useState("");
 
   const handleAddAssignment = () => {
     let newAssignmentItem = {
-      title: newTitle,
-      description: newDescription
+      class: newClass,
+      assignment: newAssignment
     }
 
     let updatedAssignmentsArray = [...allAssignments];
@@ -44,16 +44,37 @@ function App() {
     <div className="App">
       <h1>
         GMU Assignment Tracker
+      </h1>
+
+      <br/>
+
+      <h2>
+        How to use this Application:
+      </h2>
+
+      <h3>
+        1. Fill in the Class field with what class you will be adding the assignment for
+      </h3>
+
+      <h3>
+        2. Fill in the Assignment field with what the assignment will be that you want to track
+      </h3>
+
+      <h3>
+        3. Stay on top of your assignments and ace your classes!
+      </h3>
+
+      <br/>
 
         <div className='assignment-wrapper'>
           <div className='assignment-input'>
             <div className='assignment-input-item'>
-              <label>Title</label>
-              <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="What's the assignment name?" />
+              <label>Class</label>
+              <input type="text" value={newClass} onChange={(e) => setNewClass(e.target.value)} placeholder="What class is this for?" />
             </div>
             <div className='assignment-input-item'>
-              <label>Description</label>
-              <input type="text" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} placeholder="What's the assignment description?" />
+              <label>Assignment</label>
+              <input type="text" value={newAssignment} onChange={(e) => setNewAssignment(e.target.value)} placeholder="What's the assignment?" />
             </div>
             <div className='assignment-input-item'>
               <button type='button' onClick={handleAddAssignment} className='primary-button'>Add</button>
@@ -70,8 +91,8 @@ function App() {
             {allAssignments.map((item, index) => (
               <div className='assignment-list-item' key={index}>
                 <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
+                  <h3>{item.class}</h3>
+                  <p>{item.assignment}</p>
 
                 </div>
                 <div>
@@ -89,7 +110,6 @@ function App() {
             ))}
             </div>
         </div>
-      </h1>
     </div>
   );
 }
