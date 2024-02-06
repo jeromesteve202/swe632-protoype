@@ -9,6 +9,7 @@ function App() {
   const [allAssignments, setAssignments] = useState([]);
   const [newClass, setNewClass] = useState("");
   const [newAssignment, setNewAssignment] = useState("");
+  const [completedAssignments, setCompletedAssignments] = useState([]);
 
   const handleAddAssignment = () => {
     let newAssignmentItem = {
@@ -32,12 +33,38 @@ function App() {
     setAssignments(updatedAssignments);
   }
 
+  const handleComplete = (index) => {
+    let filteredAssignments = {
+      ...allAssignments[index]
+    }
+
+    let updatedCompleteArray = [...completedAssignments];
+    updatedCompleteArray.push(filteredAssignments);
+    setCompletedAssignments(updatedCompleteArray);
+    handleDelete(index);
+    localStorage.setItem('completedAssignments', JSON.stringify(updatedCompleteArray));
+  }
+
+  const handleCompletedAssignmentsDelete = (index) => {
+    let updatedAssignments = [...completedAssignments];
+    updatedAssignments.splice(index, 1);
+
+    localStorage.setItem('completedAssignments', JSON.stringify(updatedAssignments));
+    setCompletedAssignments(updatedAssignments);
+  }
+
   useEffect(() => {
     let savedAssignments = JSON.parse(localStorage.getItem('assignmentList'));
+    let completedAssignments = JSON.parse(localStorage.getItem('completedAssignments'));
 
     if (savedAssignments) {
       setAssignments(savedAssignments);
     }
+
+    if (completedAssignments) {
+      setCompletedAssignments(completedAssignments);
+    }
+    
   }, [])
 
   return (
@@ -88,7 +115,7 @@ function App() {
 
           <div className='assignment-list'>
             
-            {allAssignments.map((item, index) => (
+            {isCompleteScreen === false && allAssignments.map((item, index) => (
               <div className='assignment-list-item' key={index}>
                 <div>
                   <h3>{item.class}</h3>
@@ -102,8 +129,26 @@ function App() {
                     className="icon"
                   />
                   <FcCheckmark
+                    onClick={() => handleComplete(index)}
                     title="Completed?"
                     className=" check-icon"
+                  />
+                </div>
+              </div>
+            ))}
+
+            {isCompleteScreen === true && completedAssignments.map((item, index) => (
+              <div className='assignment-list-item' key={index}>
+                <div>
+                  <h3>{item.class}</h3>
+                  <p>{item.assignment}</p>
+
+                </div>
+                <div>
+                  <AiOutlineDelete
+                    onClick={() => handleCompletedAssignmentsDelete(index)}
+                    title="Delete?"
+                    className="icon"
                   />
                 </div>
               </div>
