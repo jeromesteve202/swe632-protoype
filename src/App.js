@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import { useEffect, useState } from 'react';
 import { AiOutlineDelete } from "react-icons/ai";
@@ -36,7 +35,7 @@ function App() {
   return (
     <div className="App">
       <h1>
-        Assignment Tracker
+        GMU Assignment Tracker
 
         <div className='assignment-wrapper'>
           <div className='assignment-input'>
