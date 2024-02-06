@@ -24,6 +24,14 @@ function App() {
     localStorage.setItem('assignmentList', JSON.stringify(updatedAssignmentsArray))
   }
 
+  const handleDelete = (index) => {
+    let updatedAssignments = [...allAssignments];
+    updatedAssignments.splice(index, 1);
+
+    localStorage.setItem('assignmentList', JSON.stringify(updatedAssignments));
+    setAssignments(updatedAssignments);
+  }
+
   useEffect(() => {
     let savedAssignments = JSON.parse(localStorage.getItem('assignmentList'));
 
@@ -68,6 +76,7 @@ function App() {
                 </div>
                 <div>
                   <AiOutlineDelete
+                    onClick={() => handleDelete(index)}
                     title="Delete?"
                     className="icon"
                   />
