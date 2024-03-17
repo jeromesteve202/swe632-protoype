@@ -2,6 +2,8 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { AiOutlineDelete } from "react-icons/ai";
 import { FcCheckmark } from "react-icons/fc";
+import { AiOutlineDoubleLeft } from "react-icons/ai";
+
 
 function App() {
 
@@ -10,6 +12,7 @@ function App() {
   const [newClass, setNewClass] = useState("");
   const [newAssignment, setNewAssignment] = useState("");
   const [completedAssignments, setCompletedAssignments] = useState([]);
+  const [showToast, setShowToast] = useState(false);
 
   const handleAddAssignment = () => {
     let newAssignmentItem = {
@@ -23,6 +26,11 @@ function App() {
     setAssignments(updatedAssignmentsArray);
     
     localStorage.setItem('assignmentList', JSON.stringify(updatedAssignmentsArray))
+
+    setShowToast(true);
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
   }
 
   const handleDelete = (index) => {
@@ -52,6 +60,19 @@ function App() {
     localStorage.setItem('completedAssignments', JSON.stringify(updatedAssignments));
     setCompletedAssignments(updatedAssignments);
   }
+
+  const handleMoveToInProgress = (index) => {
+    const assignmentToMove = completedAssignments[index];
+    const updatedCompletedAssignments = [...completedAssignments];
+    updatedCompletedAssignments.splice(index, 1);
+    const updatedAllAssignments = [...allAssignments, assignmentToMove]; 
+  
+    setCompletedAssignments(updatedCompletedAssignments);
+    setAssignments(updatedAllAssignments);
+  
+    localStorage.setItem('completedAssignments', JSON.stringify(updatedCompletedAssignments));
+    localStorage.setItem('assignmentList', JSON.stringify(updatedAllAssignments));
+  };
 
   useEffect(() => {
     let savedAssignments = JSON.parse(localStorage.getItem('assignmentList'));
@@ -97,11 +118,23 @@ function App() {
           <div className='assignment-input'>
             <div className='assignment-input-item'>
               <label>Class</label>
-              <input type="text" value={newClass} onChange={(e) => setNewClass(e.target.value)} placeholder="What class is this for?" />
+              <input 
+                type="text" 
+                value={newClass} 
+                onChange={(e) => setNewClass(e.target.value)} 
+                placeholder="What class is this for?" 
+                onKeyPress={(e) => e.key === 'Enter' && handleAddAssignment()}
+              />
             </div>
             <div className='assignment-input-item'>
               <label>Assignment</label>
-              <input type="text" value={newAssignment} onChange={(e) => setNewAssignment(e.target.value)} placeholder="What's the assignment?" />
+              <input 
+                type="text" 
+                value={newAssignment} 
+                onChange={(e) => setNewAssignment(e.target.value)} 
+                placeholder="What's the assignment?" 
+                onKeyPress={(e) => e.key === 'Enter' && handleAddAssignment()}
+              />
             </div>
             <div className='assignment-input-item'>
               <button type='button' onClick={handleAddAssignment} className='primary-button'>Add</button>
@@ -142,9 +175,9 @@ function App() {
                 <div>
                   <h3>{item.class}</h3>
                   <p>{item.assignment}</p>
-
                 </div>
                 <div>
+                  <AiOutlineDoubleLeft className="icon2" onClick={() => handleMoveToInProgress(index)}/>
                   <AiOutlineDelete
                     onClick={() => handleCompletedAssignmentsDelete(index)}
                     title="Delete?"
@@ -153,6 +186,12 @@ function App() {
                 </div>
               </div>
             ))}
+
+            {showToast && (
+              <div className="toast">
+                You just added a new assignment! Please track it in the In Progress tab.
+              </div>
+            )}
             </div>
         </div>
     </div>
